@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877403134636",
+    "project_id": "todo-notes-6cb46",
+    "storage_bucket": "todo-notes-6cb46.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877403134636:android:4f11ba633dd7c242c21d09",
+        "android_client_info": {
+          "package_name": "com.example.todo_notes"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyJTU3AZ95V_8gbh_qP5QOzzZ4IYPc9MY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
