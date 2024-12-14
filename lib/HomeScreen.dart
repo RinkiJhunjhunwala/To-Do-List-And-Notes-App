@@ -51,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: 18, color: Colors.black54),
                 ),
                 SizedBox(height:4),
-                Image.asset('assets/no_task.jpeg', height: 150),
+                Image.asset('assets/no_task.jpeg', height: 120),
                 SizedBox(height: 20),
 
                 Text(
@@ -69,32 +69,69 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               DocumentSnapshot docSnap = snapshot.data!.docs[index];
-              return CheckboxListTile(
-                activeColor: Colors.greenAccent.shade400,
-                title: Text(
-                  docSnap["work"],
-                  style: TextStyle(
-                    decoration: docSnap["Yes"] ? TextDecoration.lineThrough : null,
-                  ),
-                ),
-                value: docSnap["Yes"],
-                onChanged: (newValue) async {
-
-                  await DatabaseService().markTaskAsComplete(
-                    docSnap.id,
-                    Personal ? "Personal" : College ? "College" : "Office",
-                  );
-                  setState(() {});
-
-
-                  Future.delayed(Duration(seconds: 2), () {
+              // return CheckboxListTile(
+              //   activeColor: Colors.greenAccent.shade400,
+              //   title: Text(
+              //     docSnap["work"],
+              //     style: TextStyle(
+              //       decoration: docSnap["Yes"] ? TextDecoration.lineThrough : null,
+              //     ),
+              //   ),
+              //   value: docSnap["Yes"],
+              //   onChanged: (newValue) async {
+              //
+              //     await DatabaseService().markTaskAsComplete(
+              //       docSnap.id,
+              //       Personal ? "Personal" : College ? "College" : "Office",
+              //     );
+              //     setState(() {});
+              //
+              //
+              //     Future.delayed(Duration(seconds: 2), () {
+              //       DatabaseService().deleteTask(
+              //         docSnap.id,
+              //         Personal ? "Personal" : College ? "College" : "Office",
+              //       );
+              //     });
+              //   },
+              //   controlAffinity: ListTileControlAffinity.leading,
+              // );
+              return GestureDetector(
+                onLongPress: () {
+                  if (docSnap["Yes"]) {
+                    // Delete the task only if it is checked (completed)
                     DatabaseService().deleteTask(
                       docSnap.id,
                       Personal ? "Personal" : College ? "College" : "Office",
                     );
-                  });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Completed task deleted successfully!')),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Only completed tasks can be deleted!')),
+                    );
+                  }
                 },
-                controlAffinity: ListTileControlAffinity.leading,
+                child: CheckboxListTile(
+                  activeColor: Colors.greenAccent.shade400,
+                  title: Text(
+                    docSnap["work"],
+                    style: TextStyle(
+                      decoration: docSnap["Yes"] ? TextDecoration.lineThrough : null,
+                    ),
+                  ),
+                  value: docSnap["Yes"],
+                  onChanged: (newValue) async {
+                    // Update the task's completion status
+                    await DatabaseService().markTaskAsComplete(
+                      docSnap.id,
+                      Personal ? "Personal" : College ? "College" : "Office",
+                    );
+                    setState(() {}); // Refresh the UI
+                  },
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
               );
             },
           ),
@@ -249,84 +286,171 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // Future openBox() {
+  //   todoController.clear();
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) => AlertDialog(
+  //       content: SingleChildScrollView(
+  //         child: Container(
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               GestureDetector(
+  //                 onTap: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: Icon(Icons.cancel, color: Colors.black, size: 30),
+  //               ),
+  //               SizedBox(width: 60.0),
+  //               Text(
+  //                 "Add Task",
+  //                 style: TextStyle(
+  //                   color: Colors.purple.shade700, // Violet color
+  //                   fontSize: 22,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20),
+  //               Container(
+  //                 padding: EdgeInsets.symmetric(horizontal: 10),
+  //                 decoration: BoxDecoration(
+  //                   border: Border.all(color: Colors.black, width: 2),
+  //                 ),
+  //                 child: TextField(
+  //                   controller: todoController,
+  //                   decoration: InputDecoration(
+  //                     border: InputBorder.none,
+  //                     hintText: "Enter the task",
+  //                   ),
+  //                 ),
+  //               ),
+  //               SizedBox(height: 20),
+  //               Center(
+  //                 child: Container(
+  //                   padding: EdgeInsets.all(5),
+  //                   width: 100,
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.purple.shade700,
+  //                     borderRadius: BorderRadius.circular(10),
+  //                   ),
+  //                   child: GestureDetector(
+  //                     onTap: () {
+  //                       String id = randomAlphaNumeric(10);
+  //                       Map<String, dynamic> userTodo = {
+  //                         "work": todoController.text,
+  //                         "id": id,
+  //                         "Yes": false,
+  //                       };
+  //                       if (Personal) {
+  //                         DatabaseService().addPersonalTask(userTodo);
+  //                       } else if (College) {
+  //                         DatabaseService().addCollegeTask(userTodo);
+  //                       } else {
+  //                         DatabaseService().addOfficeTask(userTodo);
+  //                       }
+  //                       Navigator.pop(context);
+  //                     },
+  //                     child: Center(
+  //                       child: Text(
+  //                         "Add",
+  //                         style: TextStyle(color: Colors.white),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Future openBox() {
+    todoController.clear();
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
         content: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(Icons.cancel, color: Colors.black, size: 30),
-                ),
-                SizedBox(width: 60.0),
-                Text(
-                  "Add Task",
-                  style: TextStyle(
-                    color: Colors.purple.shade700, // Violet color
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 20),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black, width: 2),
-                  ),
-                  child: TextField(
-                    controller: todoController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "Enter the task",
-                    ),
-                  ),
-                ),
-                SizedBox(height: 20),
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.purple.shade700,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: GestureDetector(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return IntrinsicHeight(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
                       onTap: () {
-                        String id = randomAlphaNumeric(10);
-                        Map<String, dynamic> userTodo = {
-                          "work": todoController.text,
-                          "id": id,
-                          "Yes": false,
-                        };
-                        if (Personal) {
-                          DatabaseService().addPersonalTask(userTodo);
-                        } else if (College) {
-                          DatabaseService().addCollegeTask(userTodo);
-                        } else {
-                          DatabaseService().addOfficeTask(userTodo);
-                        }
                         Navigator.pop(context);
                       },
-                      child: Center(
-                        child: Text(
-                          "Add",
-                          style: TextStyle(color: Colors.white),
+                      child: Icon(Icons.cancel, color: Colors.black, size: 30),
+                    ),
+                    SizedBox(width: 60.0),
+                    Text(
+                      "Add Task",
+                      style: TextStyle(
+                        color: Colors.purple.shade700, // Violet color
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black, width: 2),
+                      ),
+                      child: TextField(
+                        controller: todoController,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Enter the task",
                         ),
                       ),
                     ),
-                  ),
+                    SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        padding: EdgeInsets.all(5),
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.purple.shade700,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            String id = randomAlphaNumeric(10);
+                            Map<String, dynamic> userTodo = {
+                              "work": todoController.text,
+                              "id": id,
+                              "Yes": false,
+                            };
+                            if (Personal) {
+                              DatabaseService().addPersonalTask(userTodo);
+                            } else if (College) {
+                              DatabaseService().addCollegeTask(userTodo);
+                            } else {
+                              DatabaseService().addOfficeTask(userTodo);
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: Center(
+                            child: Text(
+                              "Add",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           ),
         ),
       ),
     );
   }
+
 }
