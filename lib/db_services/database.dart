@@ -47,7 +47,22 @@ class DatabaseService {
     }
   }
 
-  Future<void> addNote(String text) async {
+  // Future<void> addNote(String text) async {
+  //   try {
+  //     String userId = _auth.currentUser!.uid;
+  //     await FirebaseFirestore.instance
+  //         .collection("Users")
+  //         .doc(userId)
+  //         .collection("Notes")
+  //         .add({
+  //       'text': text,
+  //       'timestamp': FieldValue.serverTimestamp(),
+  //     });
+  //   } catch (e) {
+  //     print("Error adding note: $e");
+  //   }
+  // }
+  Future<void> addNote(String title, String body) async {
     try {
       String userId = _auth.currentUser!.uid;
       await FirebaseFirestore.instance
@@ -55,8 +70,9 @@ class DatabaseService {
           .doc(userId)
           .collection("Notes")
           .add({
-        'text': text,
-        'timestamp': FieldValue.serverTimestamp(),
+        'title': title,                // Note title
+        'body': body,                  // Note body
+        'timestamp': FieldValue.serverTimestamp(), // Timestamp for sorting
       });
     } catch (e) {
       print("Error adding note: $e");
@@ -120,6 +136,34 @@ class DatabaseService {
   //     return Stream.empty();
   //   }
   // }
+
+  // Stream<List<Map<String, dynamic>>> getNotes() {
+  //   try {
+  //     String userId = _auth.currentUser!.uid;
+  //     return FirebaseFirestore.instance
+  //         .collection("Users")
+  //         .doc(userId)
+  //         .collection("Notes")
+  //         .orderBy('timestamp', descending: true)
+  //         .snapshots()
+  //         .map((snapshot) {
+  //       if (snapshot.docs.isEmpty) {
+  //         return [];
+  //       }
+  //       return snapshot.docs.map((doc) {
+  //         return {
+  //           'id': doc.id,
+  //           'text': doc['text'],
+  //           'timestamp': doc['timestamp'],
+  //         };
+  //       }).toList();
+  //     });
+  //   } catch (e) {
+  //     print("Error fetching notes: $e");
+  //     return Stream.empty();
+  //   }
+  // }
+
   Stream<List<Map<String, dynamic>>> getNotes() {
     try {
       String userId = _auth.currentUser!.uid;
@@ -136,8 +180,9 @@ class DatabaseService {
         return snapshot.docs.map((doc) {
           return {
             'id': doc.id,
-            'text': doc['text'],
-            'timestamp': doc['timestamp'],
+            'title': doc['title'],     // Fetch the title
+            'body': doc['body'],       // Fetch the body
+            'timestamp': doc['timestamp'], // Fetch the timestamp
           };
         }).toList();
       });
@@ -187,6 +232,24 @@ class DatabaseService {
           .delete();
     } catch (e) {
       print("Error deleting note: $e");
+    }
+  }
+
+  Future<void> updateNote(String noteId, String newTitle, String newBody) async {
+    try {
+      String userId = _auth.currentUser!.uid;
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userId)
+          .collection("Notes")
+          .doc(noteId)
+          .update({
+        "title": newTitle,
+        "body": newBody,
+        "timestamp": FieldValue.serverTimestamp(), // Update timestamp
+      });
+    } catch (e) {
+      print("Error updating note: $e");
     }
   }
 }
