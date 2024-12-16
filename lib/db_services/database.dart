@@ -47,21 +47,7 @@ class DatabaseService {
     }
   }
 
-  // Future<void> addNote(String text) async {
-  //   try {
-  //     String userId = _auth.currentUser!.uid;
-  //     await FirebaseFirestore.instance
-  //         .collection("Users")
-  //         .doc(userId)
-  //         .collection("Notes")
-  //         .add({
-  //       'text': text,
-  //       'timestamp': FieldValue.serverTimestamp(),
-  //     });
-  //   } catch (e) {
-  //     print("Error adding note: $e");
-  //   }
-  // }
+
   Future<void> addNote(String title, String body) async {
     try {
       String userId = _auth.currentUser!.uid;
@@ -70,9 +56,9 @@ class DatabaseService {
           .doc(userId)
           .collection("Notes")
           .add({
-        'title': title,                // Note title
-        'body': body,                  // Note body
-        'timestamp': FieldValue.serverTimestamp(), // Timestamp for sorting
+        'title': title,
+        'body': body,
+        'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       print("Error adding note: $e");
@@ -94,75 +80,7 @@ class DatabaseService {
     }
   }
 
-  // Future<Stream<QuerySnapshot>> getNotes() async {
-  //   try {
-  //     String userId = _auth.currentUser!.uid;
-  //     return FirebaseFirestore.instance
-  //         .collection("Users")
-  //         .doc(userId)
-  //         .collection("Notes")
-  //         .orderBy('timestamp', descending: true)
-  //         .snapshots();
-  //   } catch (e) {
-  //     print("Error fetching notes: $e");
-  //     return Stream.empty();
-  //   }
-  // }
-  // Future<Stream<List<Map<String, dynamic>>>> getNotes() async {
-  //   try {
-  //     String userId = _auth.currentUser!.uid;
-  //     final snapshot = await FirebaseFirestore.instance
-  //         .collection("Users")
-  //         .doc(userId)
-  //         .collection("Notes")
-  //         .orderBy('timestamp', descending: true)
-  //         .get();
-  //
-  //     if (snapshot.docs.isEmpty) {
-  //       return Stream.empty();
-  //     }
-  //
-  //     final notes = snapshot.docs.map((doc) {
-  //       return {
-  //         'id': doc.id,
-  //         'text': doc['text'],
-  //         'timestamp': doc['timestamp'],
-  //       };
-  //     }).toList();
-  //
-  //     return Stream.value(notes);
-  //   } catch (e) {
-  //     print("Error fetching notes: $e");
-  //     return Stream.empty();
-  //   }
-  // }
 
-  // Stream<List<Map<String, dynamic>>> getNotes() {
-  //   try {
-  //     String userId = _auth.currentUser!.uid;
-  //     return FirebaseFirestore.instance
-  //         .collection("Users")
-  //         .doc(userId)
-  //         .collection("Notes")
-  //         .orderBy('timestamp', descending: true)
-  //         .snapshots()
-  //         .map((snapshot) {
-  //       if (snapshot.docs.isEmpty) {
-  //         return [];
-  //       }
-  //       return snapshot.docs.map((doc) {
-  //         return {
-  //           'id': doc.id,
-  //           'text': doc['text'],
-  //           'timestamp': doc['timestamp'],
-  //         };
-  //       }).toList();
-  //     });
-  //   } catch (e) {
-  //     print("Error fetching notes: $e");
-  //     return Stream.empty();
-  //   }
-  // }
 
   Stream<List<Map<String, dynamic>>> getNotes() {
     try {
@@ -180,9 +98,9 @@ class DatabaseService {
         return snapshot.docs.map((doc) {
           return {
             'id': doc.id,
-            'title': doc['title'],     // Fetch the title
-            'body': doc['body'],       // Fetch the body
-            'timestamp': doc['timestamp'], // Fetch the timestamp
+            'title': doc['title'],
+            'body': doc['body'],
+            'timestamp': doc['timestamp'],
           };
         }).toList();
       });
@@ -246,7 +164,7 @@ class DatabaseService {
           .update({
         "title": newTitle,
         "body": newBody,
-        "timestamp": FieldValue.serverTimestamp(), // Update timestamp
+        "timestamp": FieldValue.serverTimestamp(),
       });
     } catch (e) {
       print("Error updating note: $e");

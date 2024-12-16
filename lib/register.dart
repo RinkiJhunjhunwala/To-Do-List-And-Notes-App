@@ -3,7 +3,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_notes/MainScreen.dart';
-// Import LoginPage
 import 'homescreen.dart';
 import 'login.dart';
 
@@ -58,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                  textAlign: TextAlign.center,  // Centers the text
+                  textAlign: TextAlign.center,
                 ),
               ),
               Center(
@@ -69,7 +68,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     //fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
-                  textAlign: TextAlign.center,  // Centers the text
+                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 40),

@@ -4,8 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_notes/MainScreen.dart';
 import 'firebase_options.dart';
-import 'login.dart'; // Import LoginPage
- // Import MainScreen
+import 'login.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,7 +32,7 @@ class _MyAppState extends State<MyApp> {
         '/main': (context) => MainScreen(),
       },
       debugShowCheckedModeBanner: false,
-      home: AuthenticationWrapper(),// Start with LoginPage
+      home: AuthenticationWrapper(),
     );
   }
 }

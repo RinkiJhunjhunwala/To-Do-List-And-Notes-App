@@ -99,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return GestureDetector(
                 onLongPress: () {
                   if (docSnap["Yes"]) {
-                    // Delete the task only if it is checked (completed)
+
                     DatabaseService().deleteTask(
                       docSnap.id,
                       Personal ? "Personal" : College ? "College" : "Office",
@@ -123,12 +123,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   value: docSnap["Yes"],
                   onChanged: (newValue) async {
-                    // Update the task's completion status
+
                     await DatabaseService().markTaskAsComplete(
                       docSnap.id,
                       Personal ? "Personal" : College ? "College" : "Office",
                     );
-                    setState(() {}); // Refresh the UI
+                    setState(() {});
                   },
                   controlAffinity: ListTileControlAffinity.leading,
                 ),
@@ -148,41 +148,13 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: openBox,
         child: Icon(Icons.add, color: Colors.white, size: 35),
       ),
-      // appBar: AppBar(
-      //   backgroundColor:  Color(0xFFD8A7F1),
-      //   // actions: [
-      //   //   IconButton(
-      //   //     icon: Icon(Icons.exit_to_app),
-      //   //     onPressed: () async {
-      //   //       await FirebaseAuth.instance.signOut();
-      //   //       Navigator.pushReplacementNamed(context, '/login');
-      //   //     },
-      //   //   ),
-      //   //   Padding(
-      //   //     padding: const EdgeInsets.only(right: 10),
-      //   //     child: Text(
-      //   //       "Sign Out",
-      //   //       style: TextStyle(color: Colors.black),
-      //   //     ),
-      //   //   ),
-      //   // ],
-      //   elevation: 0,
-      // ),
+
       resizeToAvoidBottomInset: true,
       body: Container(
         padding: EdgeInsets.only(top: 20, left: 20),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [
-        //       Colors.white,
-        //       Colors.purple.shade200,
-        //     ],
-        //     begin: Alignment.topLeft,
-        //     end: Alignment.bottomRight,
-        //   ),
-        // ),
+
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -286,87 +258,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future openBox() {
-  //   todoController.clear();
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       content: SingleChildScrollView(
-  //         child: Container(
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Icon(Icons.cancel, color: Colors.black, size: 30),
-  //               ),
-  //               SizedBox(width: 60.0),
-  //               Text(
-  //                 "Add Task",
-  //                 style: TextStyle(
-  //                   color: Colors.purple.shade700, // Violet color
-  //                   fontSize: 22,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20),
-  //               Container(
-  //                 padding: EdgeInsets.symmetric(horizontal: 10),
-  //                 decoration: BoxDecoration(
-  //                   border: Border.all(color: Colors.black, width: 2),
-  //                 ),
-  //                 child: TextField(
-  //                   controller: todoController,
-  //                   decoration: InputDecoration(
-  //                     border: InputBorder.none,
-  //                     hintText: "Enter the task",
-  //                   ),
-  //                 ),
-  //               ),
-  //               SizedBox(height: 20),
-  //               Center(
-  //                 child: Container(
-  //                   padding: EdgeInsets.all(5),
-  //                   width: 100,
-  //                   decoration: BoxDecoration(
-  //                     color: Colors.purple.shade700,
-  //                     borderRadius: BorderRadius.circular(10),
-  //                   ),
-  //                   child: GestureDetector(
-  //                     onTap: () {
-  //                       String id = randomAlphaNumeric(10);
-  //                       Map<String, dynamic> userTodo = {
-  //                         "work": todoController.text,
-  //                         "id": id,
-  //                         "Yes": false,
-  //                       };
-  //                       if (Personal) {
-  //                         DatabaseService().addPersonalTask(userTodo);
-  //                       } else if (College) {
-  //                         DatabaseService().addCollegeTask(userTodo);
-  //                       } else {
-  //                         DatabaseService().addOfficeTask(userTodo);
-  //                       }
-  //                       Navigator.pop(context);
-  //                     },
-  //                     child: Center(
-  //                       child: Text(
-  //                         "Add",
-  //                         style: TextStyle(color: Colors.white),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
   Future openBox() {
     todoController.clear();
     return showDialog(
